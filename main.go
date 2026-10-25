@@ -12,6 +12,7 @@ import (
 	"os"
 	"os/signal"
 	"regexp"
+	"schemaforge/schemaforge"
 	"sort"
 	"strconv"
 	"strings"
@@ -49,7 +50,8 @@ var (
 )
 
 type server struct {
-	db *pgxpool.Pool
+	db      *pgxpool.Pool
+	library *schemaforge.Client
 }
 
 type apiError struct {
@@ -954,7 +956,19 @@ func run() error {
 		port = defaultPort
 	}
 
-	s := &server{db: pool}
+	library, err := schemaforge.NewWithPool(
+		pool,
+		os.Getenv("GEMINI_API_KEY"),
+	)
+	if err != nil {
+		return fmt.Errorf("initialize SchemaForge library: %w", err)
+	}
+	defer library.Close()
+
+	s := &server{
+		db:      pool,
+		library: library,
+	}
 
 	srv := &http.Server{
 		Addr:              ":" + port,

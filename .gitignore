@@ -1,5 +1,5 @@
 .env
 .env.*
 !.env.example
-schemaforge
+/schemaforge-bin
 *.log
