@@ -11,7 +11,8 @@ import (
 	"time"
 )
 
-const geminiEndpoint = "https://generativelanguage.googleapis.com/v1beta/models/gemini-3.5-flash-lite:generateContent"
+var geminiEndpoint = "https://generativelanguage.googleapis.com/v1beta/models/gemini-3.5-flash-lite:generateContent"
+var geminiHTTPClient = &http.Client{Timeout: 90 * time.Second}
 
 func (c *Client) parseInstruction(ctx context.Context, instruction string) (*Action, error) {
 	prompt := `Convert the user's request into one database action.
@@ -63,7 +64,7 @@ User request: ` + instruction
 	req.Header.Set("Content-Type", "application/json")
 	req.Header.Set("x-goog-api-key", c.geminiKey)
 
-	client := &http.Client{Timeout: 90 * time.Second}
+	client := geminiHTTPClient
 	resp, err := client.Do(req)
 	if err != nil {
 		return nil, fmt.Errorf("Gemini request failed: %w", err)
