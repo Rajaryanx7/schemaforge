@@ -11,6 +11,16 @@ import (
 	"github.com/jackc/pgx/v5"
 )
 
+// Execute runs an action that matches a valid, unused preview token.
+//
+// The action must match the action returned by Preview, the preview token
+// must not be expired or previously used, and confirm must be true.
+//
+// The preview token is consumed before database revalidation and execution.
+// Therefore, a failed execution may require creating a new preview.
+//
+// Database values are passed as query parameters, and identifiers are quoted
+// before being included in SQL statements.
 func (c *Client) Execute(
 	ctx context.Context,
 	action Action,

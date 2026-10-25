@@ -956,10 +956,10 @@ func run() error {
 		port = defaultPort
 	}
 
-	library, err := schemaforge.New(schemaforge.Config{
-		DatabaseURL:  os.Getenv("DATABASE_URL"),
-		GeminiAPIKey: os.Getenv("GEMINI_API_KEY"),
-	})
+	library, err := schemaforge.NewWithPool(
+		pool,
+		os.Getenv("GEMINI_API_KEY"),
+	)
 	if err != nil {
 		return fmt.Errorf("initialize SchemaForge library: %w", err)
 	}

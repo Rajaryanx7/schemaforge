@@ -7,6 +7,12 @@ import (
 	"time"
 )
 
+// Preview converts a natural-language instruction into a validated database
+// action and returns the action with a short-lived, single-use confirmation
+// token. It does not modify the database.
+//
+// The instruction must not be empty and cannot exceed 2000 characters.
+// The returned token is required to execute the exact previewed action.
 func (c *Client) Preview(
 	ctx context.Context,
 	instruction string,
