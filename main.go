@@ -854,6 +854,8 @@ func (s *server) routes() http.Handler {
 	mux.HandleFunc("GET /records/{table}", s.handleListRecords)
 	mux.HandleFunc("PATCH /records/{table}/{id}", s.handlePatchRecord)
 	mux.HandleFunc("DELETE /records/{table}/{id}", s.handleDeleteRecord)
+	mux.HandleFunc("POST /action", s.handleAction)
+	mux.HandleFunc("POST /action/execute", s.handleExecuteAction)
 	mux.HandleFunc("/", handleNotFound)
 
 	return withMiddleware(mux)
